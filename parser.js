@@ -1,4 +1,4 @@
-﻿var vCardParser = (function () {
+var vCardParser = (function () {
 
     var fieldPropertyMapping = {
         "TITLE": "title",
@@ -174,13 +174,15 @@
 
             // is additional type info provided ?
             if (fieldName.indexOf(';') >= 0 && line.indexOf(';') < line.indexOf(':')) {
-                var typeInfo = fieldName.split(';');
+                //lets replace repeated ; with one ;
+                let fieldNameNormilized = fieldName.replace(/;;/g, ';');
+                var typeInfo = fieldNameNormilized.split(';');
                 fieldName = typeInfo[0];
                 fieldTypeInfo = typeInfo.slice(1).map(function (type) {
                     var info = type.split('=');
                     return {
                         name: info[0].toLowerCase(),
-                        value: info[1].replace(/"(.*)"/, '$1')
+                        value: info[1]||''.replace(/"(.*)"/, '$1')
                     }
                 });
             }
@@ -233,5 +235,4 @@
     };
 
 })();
-
 
